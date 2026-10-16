@@ -45,7 +45,7 @@ button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 <main>
   <section id="intro">
     <h1><span class="p">Physics</span> or <span class="b">Biology</span>?</h1>
-    <p class="muted" style="margin-top:18px">Ten quick questions about how you think and what you enjoy. There are no right answers, so pick what is most true for you.</p>
+    <p class="muted" style="margin-top:18px">Ten quick questions based on what you would actually study in O Level Physics and Biology. There are no right answers, so pick what is most true for you.</p>
     <p class="muted">This quiz shows which way you lean. It doesn't decide for you. Your grades and a chat with your teacher matter too.</p>
     <button class="btn" id="start">Start the quiz</button>
   </section>
@@ -64,6 +64,7 @@ button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
     <div class="split" id="split" role="img"></div>
     <p class="muted" id="rnote"></p>
     <div class="card"><h3 id="rh1"></h3><ul id="rl1"></ul></div>
+    <div class="card"><h3>What you would study</h3><div id="topics"></div></div>
     <div class="card"><h3>Before you decide</h3><ul>
       <li>Check how you are doing in Math and in your Science classes right now.</li>
       <li>Ask your teacher what the subject is really like day to day.</li>
@@ -76,59 +77,65 @@ button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 <script>
 // p = points toward Physics, b = points toward Biology
 var Q=[
-{q:"You have a free evening. Which video do you click on?",o:[
- {t:"How rockets break free of Earth's gravity",p:2,b:0},
- {t:"What your body does during a marathon",p:0,b:2},
- {t:"How wifi sends data through the air",p:2,b:0},
- {t:"Why some people get allergies",p:0,b:2}]},
-{q:"In a practical lesson, which would you most want to do?",o:[
- {t:"Build a circuit and measure the current",p:2,b:0},
- {t:"Look at cells under a microscope and draw them",p:0,b:2},
- {t:"Test how fast plants grow in different light",p:0,b:1},
- {t:"Drop objects and time how they fall",p:2,b:0}]},
-{q:"How true is this? \"I enjoy using formulas to solve a problem.\"",o:[
+{q:"You're on a roller coaster. What are you wondering about?",o:[
+ {t:"How fast it goes at the bottom, and why it stays on the track",p:2,b:0},
+ {t:"Why your heart pounds and your hands shake",p:0,b:2},
+ {t:"How the lights and rides are wired up safely",p:2,b:0}]},
+{q:"You're cooking dinner. What grabs your attention?",o:[
+ {t:"Why a metal spoon gets hot but a wooden one doesn't",p:2,b:0},
+ {t:"How yeast makes the dough rise",p:0,b:2},
+ {t:"How a microwave heats food without a flame",p:2,b:0},
+ {t:"How your body breaks the meal down after you eat it",p:0,b:2}]},
+{q:"Pick a lab session for today:",o:[
+ {t:"Time a pendulum and see what changes its swing",p:2,b:0},
+ {t:"Test foods for starch, sugar and protein",p:0,b:2},
+ {t:"Shine light through a glass block and trace how it bends",p:2,b:0},
+ {t:"Look at onion cells under a microscope and draw them",p:0,b:2}]},
+{q:"At a concert, which question pops into your head?",o:[
+ {t:"How does sound travel, and what makes a note higher or louder?",p:2,b:0},
+ {t:"How do your ears and brain turn vibrations into music?",p:0,b:2},
+ {t:"How do phone signals reach everyone's phones here?",p:2,b:0}]},
+{q:"Which mystery would you most like to solve?",o:[
+ {t:"Why you have your mum's eyes but your dad's height",p:0,b:2},
+ {t:"Why a rubbed balloon sticks to the wall",p:2,b:0},
+ {t:"How bacteria become resistant to antibiotics",p:0,b:2},
+ {t:"Why some atoms give off radiation, and how it's detected",p:2,b:0}]},
+{q:"How true is this? \"I like using formulas and graphs to predict what will happen.\"",o:[
  {t:"Not me at all",p:0,b:1},{t:"A little",p:1,b:1},{t:"Mostly me",p:2,b:0},{t:"Very me",p:3,b:0}]},
-{q:"How true is this? \"I can remember lots of terms, processes and diagrams.\"",o:[
+{q:"How true is this? \"I can learn new terms and label diagrams of organs, cells and processes.\"",o:[
  {t:"Not me at all",p:1,b:0},{t:"A little",p:1,b:1},{t:"Mostly me",p:0,b:2},{t:"Very me",p:0,b:3}]},
-{q:"Which puzzle would you rather crack?",o:[
- {t:"Why does a phone get hot when it charges?",p:2,b:0},
- {t:"Why does the same virus make some people much sicker than others?",p:0,b:2}]},
-{q:"Which sounds like the worse exam?",o:[
- {t:"Lots of calculations with many steps",p:0,b:2},
- {t:"Lots of facts and terms to learn by heart",p:2,b:0},
- {t:"Both would be fine",p:1,b:1}]},
-{q:"When you face a question you have never seen before, you usually...",o:[
- {t:"Work it out step by step from what you know",p:2,b:0},
- {t:"Try to recall something similar you studied",p:0,b:2},
- {t:"A bit of both",p:1,b:1}]},
+{q:"You can run one mission to help the planet. Which one?",o:[
+ {t:"Design a more efficient way to power and heat homes",p:2,b:0},
+ {t:"Protect a rainforest by studying its food webs and how humans affect it",p:0,b:2},
+ {t:"Find out how plants turn sunlight into food, and how to grow more",p:0,b:2}]},
 {q:"Which area could you see yourself in one day?",o:[
  {t:"Engineering, IT or technology",p:3,b:0},
  {t:"Medicine, nursing or health",p:0,b:3},
  {t:"Environment, food science or biotech",p:0,b:2},
  {t:"No idea yet, and that's fine",p:0,b:0}]},
-{q:"Which sounds more interesting to learn about?",o:[
- {t:"Forces, energy, waves and electricity",p:2,b:0},
- {t:"Genes, ecosystems and the human body",p:0,b:2},
- {t:"They both sound great",p:1,b:1}]},
 {q:"If you had to pick right now, which one?",o:[
  {t:"Physics",p:3,b:0},{t:"Biology",p:0,b:3},{t:"I really don't know",p:0,b:0}]}
 ];
+var T={
+ phys:["Measurement","Motion, forces and energy (kinematics, dynamics, turning effects, pressure, work and power)","Thermal physics (heat transfer, temperature, kinetic model)","Waves (light, sound, the electromagnetic spectrum)","Electricity and magnetism (static, circuits, electromagnetism, induction)","Radioactivity"],
+ bio:["Cells and how substances move in and out","Biological molecules and enzymes","Nutrition and transport in plants and humans","Respiration, excretion and homeostasis","Coordination and response (nerves and hormones)","Reproduction, molecular genetics and inheritance","Organisms, ecosystems and human impact"]
+};
 var R={
- phys:{title:"You lean Physics",cls:"p",h:"Why Physics could suit you",l:[
-  "You like working things out step by step and using formulas.",
-  "You enjoy asking how and why machines and technology work.",
+ phys:{title:"You lean Physics",h:"Why Physics could suit you",l:[
+  "You enjoy working things out with formulas and graphs, which you'll use in motion, forces and electricity.",
+  "You wonder how things like circuits, light and sound actually work.",
   "It pairs well with Math and leads to engineering and IT paths.",
   "Heads up: it needs steady practice with calculations."]},
- bio:{title:"You lean Biology",cls:"b",h:"Why Biology could suit you",l:[
-  "You are curious about living things, health and the human body.",
-  "You are comfortable learning terms, processes and diagrams.",
+ bio:{title:"You lean Biology",h:"Why Biology could suit you",l:[
+  "You're curious about the human body, living things and how they connect.",
+  "You're comfortable learning processes and labelling diagrams.",
   "It leads to medicine, health, environment and biotech paths.",
-  "Heads up: it needs a lot of regular revision of content."]},
- mid:{title:"You're right in the middle",cls:"",h:"What this means",l:[
-  "You show strengths and interests on both sides, which is common.",
-  "Try a sample lesson or ask older students about each subject.",
-  "Look at your recent test results to see where you are stronger.",
-  "Think about which subject you would pick if grades were equal."]}
+  "Heads up: it needs regular revision of lots of content."]},
+ mid:{title:"You're right in the middle",h:"What this means",l:[
+  "You show interests and strengths on both sides, which is common.",
+  "Ask older students what each subject is really like day to day.",
+  "Look at your recent test results to see where you're stronger.",
+  "Think about which one you'd pick if your grades were equal."]}
 };
 var i=0,ans=[],$=function(id){return document.getElementById(id)};
 function show(id){["intro","quiz","result"].forEach(function(s){$(s).classList.toggle("hide",s!==id)});window.scrollTo(0,0)}
@@ -158,6 +165,8 @@ function finish(){
   $("rnote").textContent=key==="mid"?"Your answers split fairly evenly between the two.":"Based on your answers, this is the way you lean right now.";
   $("rh1").textContent=r.h;
   $("rl1").innerHTML=r.l.map(function(x){return "<li>"+x+"</li>"}).join("");
+  var tp=function(n,a){return "<p><strong>"+n+"</strong></p><ul>"+a.map(function(x){return "<li>"+x+"</li>"}).join("")+"</ul>"};
+  $("topics").innerHTML=key==="phys"?tp("Physics (6091)",T.phys):key==="bio"?tp("Biology (6093)",T.bio):tp("Physics (6091)",T.phys)+tp("Biology (6093)",T.bio);
   show("result");
 }
 $("start").onclick=function(){i=0;ans=[];render();show("quiz")};
